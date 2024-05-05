@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff15a36d7c47419fb4577b073ce6952, type: 3}
+  m_Name: Door_closed
+  m_EditorClassIdentifier: 
+  name: Door_closed
+  tile: {fileID: 11400000, guid: 9faca44f5ab1541d4b89c1358cae9387, type: 2}
