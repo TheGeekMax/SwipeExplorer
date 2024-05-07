@@ -17,7 +17,8 @@ public class UIManager : MonoBehaviour{
         }
     }
 
-    private void Start() {
-            
+    public void initialise() {
+        //put test 1 screen down
+        LeanTween.move(test, new Vector3(0, -Screen.height, 0), 0);
     }
 }

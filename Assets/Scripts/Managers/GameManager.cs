@@ -32,6 +32,6 @@ public class GameManager : MonoBehaviour{
 
         //UI
         InventoryUIManager.instance.initialise();
-
+        UIManager.instance.initialise();
     }
 }
