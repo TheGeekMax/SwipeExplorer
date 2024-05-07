@@ -8,10 +8,7 @@ public class InventoryUIManager : MonoBehaviour{
 
     public Sprite defaultNull = null;
 
-    public Image slot0;
-    public Image slot1;
-    public Image slot2;
-    public Image slot3;
+    public Image[] itemsPlaceholders;
     void Awake(){
         if(instance == null){
             instance = this;
@@ -28,15 +25,14 @@ public class InventoryUIManager : MonoBehaviour{
     public void UpdateUI(){
         List<Item> items = PlayerInventoryManager.instance.GetItems();
         //reset all slots
-        slot0.sprite = defaultNull;
-        slot1.sprite = defaultNull;
-        slot2.sprite = defaultNull;
-        slot3.sprite = defaultNull;
+        for (int i = 0; i < itemsPlaceholders.Length; i++){
+            itemsPlaceholders[i].sprite = defaultNull;
+        }
 
-        if(items.Count > 0) slot0.sprite = items[0].Icon;
-        if(items.Count > 1) slot1.sprite = items[1].Icon;
-        if(items.Count > 2) slot2.sprite = items[2].Icon;
-        if(items.Count > 3) slot3.sprite = items[3].Icon;
+        //update slots
+        for (int i = 0; i < items.Count; i++){
+            itemsPlaceholders[i].sprite = items[i].Icon;
+        }
     }
 
 }

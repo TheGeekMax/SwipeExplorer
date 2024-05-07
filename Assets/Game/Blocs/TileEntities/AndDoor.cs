@@ -5,6 +5,8 @@ using UnityEngine;
 public class AndDoor : TileBlocEntity{
     string signal1, signal2;
     bool signal1Recieved, signal2Recieved;
+    
+    private bool used = false;
     public AndDoor(Vector2Int pos, string signal1, string signal2){
         this.tile = BlocManager.instance.GetTile("Door_closed");
         this.isWalkable = false;
@@ -32,10 +34,11 @@ public class AndDoor : TileBlocEntity{
             this.tile = BlocManager.instance.GetTile("Door_open");
             this.isInteractable = false;
             this.isWalkable = true;
+            used = true;
         }
     }
 
     public override bool IsInteractable(){
-        return signal1Recieved && signal2Recieved;
+        return signal1Recieved && signal2Recieved && !used;
     }
 }

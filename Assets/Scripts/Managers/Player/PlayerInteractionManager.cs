@@ -7,7 +7,7 @@ public class PlayerInteractionManager : MonoBehaviour{
     public static PlayerInteractionManager instance;
     public Button InteractButton;
 
-
+    private bool isButtonShown = false;
     private Player instancePlayer;
     void Awake(){
         if(instance == null){
@@ -19,15 +19,31 @@ public class PlayerInteractionManager : MonoBehaviour{
 
     public void initialise(){
         //initialise manager 
-        instancePlayer = PlayerManager.instance.GetPlayer();  
+        instancePlayer = PlayerManager.instance.GetPlayer();
+        isButtonShown = GetShown();
         updateInteractButton();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public void updateInteractButton(){
-        InteractButton.gameObject.SetActive(MapManager.instance.IsInteractableTile(instancePlayer.GetGridPosition()));
+        bool temp = GetShown();
+        if (temp != isButtonShown){
+            isButtonShown = temp;
+            if (isButtonShown){
+                UIManager.instance.InteractAppear();
+            }
+            else{
+                UIManager.instance.InteractDisappear(null);
+            }
+        }
+    }
+    
+    private bool GetShown(){
+        return MapManager.instance.IsInteractableTile(instancePlayer.GetGridPosition());
     }
 
     public void Interact(){
+        if (!isButtonShown) return;
         MapManager.instance.Interact(instancePlayer.GetGridPosition());
         updateInteractButton();
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SignalManager : MonoBehaviour{
     public static SignalManager instance;
@@ -29,7 +30,7 @@ public class SignalManager : MonoBehaviour{
         signals = new List<Signal>();
     }
 
-    public void Subscribe(string signalName, System.Action callback){
+    public void Subscribe(string signalName, Action callback){
         Signal signal = signals.Find(s => s.signalName == signalName);
         if(signal == null){
             signal = new Signal(signalName);
@@ -37,7 +38,7 @@ public class SignalManager : MonoBehaviour{
         }
         signal.callback += callback;
     }
-
+    
     public void SendSignal(string signalName){
         Signal signal = signals.Find(s => s.signalName == signalName);
         if(signal != null){
