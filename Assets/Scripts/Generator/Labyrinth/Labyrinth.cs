@@ -39,7 +39,7 @@ public class Labyrinth{
         if(y < height - 1 && !cells[x, y + 1].visited){
             neighbors.Add(cells[x, y + 1]);
         }
-
+        
         return neighbors;
     }
 
