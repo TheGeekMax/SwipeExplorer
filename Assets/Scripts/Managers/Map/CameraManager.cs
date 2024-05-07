@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour{
 
     public GameObject Background;
 
-    public int horizontalSize = 6;
+    public float horizontalSize = 6;
 
     public float cameraSpeed = 0.5f;
 
@@ -75,7 +75,7 @@ public class CameraManager : MonoBehaviour{
     void Update(){
         calculateGridPosition();
         //lerp to grid position
-        Vector3 targetPosition = new Vector3(gridPosition.x, gridPosition.y, -10);
+        Vector3 targetPosition = new Vector3(gridPosition.x+.5f, gridPosition.y+.5f, -10);
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, cameraSpeed*Time.deltaTime);
         Background.transform.position = Camera.main.transform.position-new Vector3(0,0,Camera.main.transform.position.z+1);
         AddLightIfNeeded();

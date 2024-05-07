@@ -32,6 +32,7 @@ public class MapManager : MonoBehaviour{
 
     private void generateMap(){
         //generate map
+        /*
         TileBloc w = new BrickWall(new Vector2Int(0, 0));
         TileBloc i = new SandBackground(new Vector2Int(0, 0));
         TileBloc n = null;
@@ -59,6 +60,8 @@ public class MapManager : MonoBehaviour{
         {n, n, n, n, n, n, n, n, n, n, n, w, w, w, w, w, w, w, w, w, w}
 
         };
+        
+        
         mapEntity = new TileBlocEntity[mapBloc.GetLength(0), mapBloc.GetLength(1)];
         mapEntity[9,8] = new Faucet(new Vector2Int(8, 9));
         mapEntity[8,8] = new Bac(new Vector2Int(8, 8),"s1");
@@ -66,7 +69,30 @@ public class MapManager : MonoBehaviour{
         mapEntity[1,9] = new AndDoor(new Vector2Int(1,9),"s1","s2");
         mapEntity[8,19] = new Key(new Vector2Int(19,8));
         mapEntity[11,17] = new Door(new Vector2Int(17,11));
+        */
+        
+        RoomGenerator room = new RoomGenerator(gridWidth, gridHeight);
+        room.Generate();
+        CellType[,] mapB = room.GetRoom();
+        mapBloc = new TileBloc[mapB.GetLength(0), mapB.GetLength(1)];
+        for(int i = 0; i < mapB.GetLength(0); i++){
+            for(int j = 0; j < mapB.GetLength(1); j++){
+                switch(mapB[i, j]){
+                    case CellType.WALL:
+                        mapBloc[i, j] = new BrickWall(new Vector2Int(j, i));
+                        break;
+                    case CellType.FLOOR:
+                        mapBloc[i, j] = new SandBackground(new Vector2Int(j, i));
+                        break;
+                    default:
+                        mapBloc[i, j] = null;
+                        break;
+                }
+            }
+        }
+        mapEntity = new TileBlocEntity[mapBloc.GetLength(0), mapBloc.GetLength(1)];
 
+        
         //show map
         showMap();
     }
