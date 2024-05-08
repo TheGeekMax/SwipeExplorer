@@ -18,23 +18,10 @@ public class RoomGenerator{
 
         bool f = false;
         bool t = true;
-        this.room = new bool[,]{
-            {t,t,t,t,t,t,t,t,t,t,t,t,t,t,t},
-            {t,f,f,f,f,f,f,f,t,f,f,f,f,f,t},
-            {t,f,t,t,t,t,t,f,t,f,t,t,t,f,t},
-            {t,f,f,f,f,f,t,f,t,f,f,f,f,f,t},
-            {t,f,t,f,t,t,t,f,t,f,t,t,t,t,t},
-            {t,f,t,f,f,f,t,f,t,f,f,f,f,f,t},
-            {t,t,t,t,t,f,t,f,t,f,t,f,t,t,t},
-            {t,f,f,f,t,f,f,f,t,f,t,f,f,f,t},
-            {t,f,t,f,t,f,t,t,t,f,t,t,t,f,t},
-            {t,f,t,f,t,f,f,f,f,f,f,f,t,f,t},
-            {t,f,t,f,t,t,t,f,t,t,t,f,t,f,t},
-            {t,f,f,f,f,f,f,f,f,f,f,f,f,f,t},
-            {t,f,t,t,t,t,t,f,t,f,t,t,t,f,t},
-            {t,f,f,f,f,f,f,f,t,f,f,f,f,f,t},
-            {t,t,t,t,t,t,t,t,t,t,t,t,t,t,t}
-        };
+
+        RoomDecoder decoder = new RoomDecoder(15);
+        Room currentRoom = decoder.DecodeRoom("//FWWzrDeWrrleWVLFYYLtj2erTD0WzrDWW///");
+        room = currentRoom.GetRoomGrid();
     }
 
     private bool[,] rotate(bool[,] room){
