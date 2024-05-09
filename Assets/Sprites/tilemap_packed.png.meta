@@ -181,7 +181,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -189,6 +189,27 @@ TextureImporter:
       bones: []
       spriteID: 34ac66516e711461dbebb81fe8cfe01b
       internalID: 615838718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: backpack
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c7c2fab9de0d472e9e1c9a9c8ceb103
+      internalID: -1133814750
       vertices: []
       indices: 
       edges: []
@@ -204,9 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      backpack: -1133814750
       grass_0: -721697901
       grass_1: -59495753
       grass_2: -226623763
+      tilemap_packed_0: 224159639
       wall: 615838718
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

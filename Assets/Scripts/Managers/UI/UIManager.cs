@@ -12,6 +12,11 @@ public class UIManager : MonoBehaviour{
     public GameObject main;
     public GameObject inventory;
     
+    [Header("Animation Curves")]
+    public AnimationCurve inventoryCloseMain;
+
+    public AnimationCurve inventoryOpenInventory;
+    
     void Awake(){
         if(instance == null){
             instance = this;
@@ -32,13 +37,13 @@ public class UIManager : MonoBehaviour{
         LeanTween.move(main, new Vector3(Screen.width*2, Screen.height/2, 0), .5f)
             .setEase(LeanTweenType.easeOutBack);
         LeanTween.move(inventory, new Vector3(Screen.width/2, Screen.height/2, 0), .5f)
-            .setEase(LeanTweenType.easeOutBack)
+            .setEase(inventoryOpenInventory)
             .setDelay(.2f);
     }
     
     public void HideInventory(){
         LeanTween.move(main, new Vector3(Screen.width/2, Screen.height/2, 0), .5f)
-            .setEase(LeanTweenType.easeOutBack)
+            .setEase(inventoryCloseMain)
             .setDelay(.2f);
         LeanTween.move(inventory, new Vector3(Screen.width/2, -Screen.height, 0), .5f)
             .setEase(LeanTweenType.easeOutBack);

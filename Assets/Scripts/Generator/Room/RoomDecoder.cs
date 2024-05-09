@@ -21,7 +21,6 @@ public class RoomDecoder{
                     index = 0;
                     binary = alphabet.tobinary(room[sIndex]);
                     sIndex++;
-                    Debug.Log(i+" "+j);
                 }
                 newRoom.SetTile(j, i, binary[index] == 1);
                 index++;

@@ -16,9 +16,6 @@ public class RoomGenerator{
         this.width = width;
         this.height = height;
 
-        bool f = false;
-        bool t = true;
-
         RoomDecoder decoder = new RoomDecoder(15);
         Room currentRoom = decoder.DecodeRoom("//FWWzrDeWrrleWVLFYYLtj2erTD0WzrDWW///");
         room = currentRoom.GetRoomGrid();
