@@ -4,19 +4,17 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public abstract class TileBloc{
-    protected TileBase tile;
-    protected bool isWalkable;
+    public TileBase TileSprite { get; protected set; }
+    public  bool IsWalkable{ get; protected set; }
+    public int Id { get; protected set; }
+    
     protected Vector2Int position;
-
-    public TileBase GetTile(){
-        return tile;
-    }
-
-    public bool IsWalkable(){
-        return isWalkable;
-    }
+    
 
     public Vector2Int GetPosition(){
         return position;
     }
+    
+    public abstract string GetId();
+
 }

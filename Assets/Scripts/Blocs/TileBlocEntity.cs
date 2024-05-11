@@ -5,30 +5,15 @@ using UnityEngine.Tilemaps;
 using System;
 
 public abstract class TileBlocEntity{
-    protected TileBase tile;
-    protected bool isWalkable;
+    public TileBase TileSprite { get; protected set; }
+    protected bool isWalkable = true;
+    protected bool isInteractable = false;
     protected Vector2Int position;
-    protected bool isInteractable;
-
-    public TileBase GetTile(){
-        return tile;
-    }
-
-    public virtual bool IsWalkable(){
-        return isWalkable;
-    }
 
     public Vector2Int GetPosition(){
         return position;
     }
-
-    public virtual bool IsInteractable(){
-        return isInteractable;
-    }
-
-    public virtual void OnSignalRecieved(string signal){
-        //do nothing
-    }
+    
     public virtual void OnWalk(){
         //do nothing
     }
@@ -40,8 +25,23 @@ public abstract class TileBlocEntity{
         //Invoke("RemoveSelf", delay);
         RemoveSelf();
     }
+    
+    public virtual bool IsWalkable(){
+        return isWalkable;
+    }
+
+    public virtual bool IsInteractable(){
+        return isInteractable;
+    }
+
+    public virtual void SetupSignal(string prefix){
+        //do nothing
+    }
 
     protected void RemoveSelf(){
         MapManager.instance.RemoveTileEntity(position);
-    }
+    } 
+    
+    public abstract string GetId();
+
 }

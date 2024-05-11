@@ -16,6 +16,8 @@ public class MapManager : MonoBehaviour{
     public TileBloc[,] mapBloc;
     public TileBlocEntity[,] mapEntity;
 
+    public LevelObject activeLevel;
+
 
     void Awake(){
         if(instance == null){
@@ -33,6 +35,7 @@ public class MapManager : MonoBehaviour{
     private void generateMap(){
         //generate map
         
+        /*
         TileBloc w = new BrickWall(new Vector2Int(0, 0));
         TileBloc i = new SandBackground(new Vector2Int(0, 0));
 
@@ -72,133 +75,138 @@ public class MapManager : MonoBehaviour{
         mapEntity[1,9] = new AndDoor(new Vector2Int(1,9),"s1","s2");
         mapEntity[8,19] = new Key(new Vector2Int(19,8));
         mapEntity[11,17] = new Door(new Vector2Int(17,11));
+        */
         
-        /*
-        RoomGenerator room = new RoomGenerator(gridWidth, gridHeight);
+        RoomGenerator room = new RoomGenerator(gridWidth, gridHeight,activeLevel);
         room.Generate();
         CellType[,] mapB = room.GetRoom();
         mapBloc = new TileBloc[mapB.GetLength(0), mapB.GetLength(1)];
+        TileBlocConstructor wall = BlocManager.instance.GetTileType("brickwall");
+        TileBlocConstructor floor = BlocManager.instance.GetTileType("grass");
         for(int i = 0; i < mapB.GetLength(0); i++){
             for(int j = 0; j < mapB.GetLength(1); j++){
-                switch(mapB[i, j]){
-                    case CellType.WALL:
-                        mapBloc[i, j] = new BrickWall(new Vector2Int(j, i));
-                        break;
-                    case CellType.FLOOR:
-                        mapBloc[i, j] = new SandBackground(new Vector2Int(j, i));
-                        break;
-                    default:
-                        mapBloc[i, j] = null;
-                        break;
+                if(mapB[i, j].Equals(CellType.NULL)){
+                    mapBloc[i, j] = null;
+                }else{
+                    mapBloc[i, j] = BlocManager.instance.GetTileType(mapB[i, j].id).CreateTile(new Vector2Int(j,i));
                 }
             }
         }
         mapEntity = new TileBlocEntity[mapBloc.GetLength(0), mapBloc.GetLength(1)];
-        */
+        string[,] mapE = room.GetTileSet();
+        for(int i = 0; i < mapE.GetLength(0); i++){
+            for(int j = 0; j < mapE.GetLength(1); j++){
+                if(mapE[i, j] == null){
+                    mapEntity[i, j] = null;
+                }else{
+                    mapEntity[i, j] = BlocManager.instance.GetTileEntityType(mapE[i, j]).CreateTileEntity(new Vector2Int(j,i));
+                }
+            }
+        }
 
         //show map
         showMap();
-}
+    }
 
-private void showMap(){
-//show map
-for(int i = 0; i < mapBloc.GetLength(0); i++){
-    for(int j = 0; j < mapBloc.GetLength(1); j++){
-        if(mapBloc[i, j] == null){
-            tileMapBloc.SetTile(new Vector3Int(j, i, 0), null);
-            continue;
+    private void showMap(){
+        //show map
+        for(int i = 0; i < mapBloc.GetLength(0); i++){
+            for(int j = 0; j < mapBloc.GetLength(1); j++){
+                if(mapBloc[i, j] == null){
+                    tileMapBloc.SetTile(new Vector3Int(j, i, 0), null);
+                    continue;
+                }
+                tileMapBloc.SetTile(new Vector3Int(j, i, 0), mapBloc[i, j].TileSprite);
+            }
         }
-        tileMapBloc.SetTile(new Vector3Int(j, i, 0), mapBloc[i, j].GetTile());
-    }
-}
-for(int i = 0; i < mapEntity.GetLength(0); i++){
-    for(int j = 0; j < mapEntity.GetLength(1); j++){
-        if(mapEntity[i, j] != null){
-            tileMapEntity.SetTile(new Vector3Int(j, i, 0), mapEntity[i, j].GetTile());
-        }else{
-            tileMapEntity.SetTile(new Vector3Int(j, i, 0), null);
+        for(int i = 0; i < mapEntity.GetLength(0); i++){
+            for(int j = 0; j < mapEntity.GetLength(1); j++){
+                if(mapEntity[i, j] != null){
+                    tileMapEntity.SetTile(new Vector3Int(j, i, 0), mapEntity[i, j].TileSprite);
+                }else{
+                    tileMapEntity.SetTile(new Vector3Int(j, i, 0), null);
+                }
+            }
         }
     }
-}
-}
 
-public void ForceInteract(Vector2Int gridPosition){
-//force interact with bloc
-if(mapEntity[gridPosition.y, gridPosition.x] != null){
-    mapEntity[gridPosition.y, gridPosition.x].OnInteract();
-}
-showMap();
-}
-
-public bool IsWalkable(Vector2Int gridPosition){
-//check if bloc is walkable
-if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
-    return false;
-}
-if(mapBloc[gridPosition.y, gridPosition.x].IsWalkable() && (mapEntity[gridPosition.y, gridPosition.x] == null)){
-    return true;
-}else if(mapEntity[gridPosition.y, gridPosition.x] != null && mapEntity[gridPosition.y, gridPosition.x].IsWalkable()){
-    mapEntity[gridPosition.y, gridPosition.x].OnWalk();
-    return true;
-}
-return false;
-}
-
-private void InteractUnit(Vector2Int gridPosition){
-//interact with unit
-if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
-    return;
-}
-if(mapEntity[gridPosition.y, gridPosition.x] != null)
-    mapEntity[gridPosition.y, gridPosition.x].OnInteract();
-}
-public void Interact(Vector2Int gridPosition){
-//interact with bloc
-for(int i = -1; i <= 1; i++){
-    for(int j = -1; j <= 1; j++){
-        InteractUnit(gridPosition + new Vector2Int(i, j));
+    public void ForceInteract(Vector2Int gridPosition){
+        //force interact with bloc
+        if(mapEntity[gridPosition.y, gridPosition.x] != null){
+            mapEntity[gridPosition.y, gridPosition.x].OnInteract();
+        }
+        showMap();
     }
-}
-showMap();
-}
 
-private bool IsInteractableUnit(Vector2Int gridPosition){
-//check if unit is interactable
-if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
-    return false;
-}
-return mapEntity[gridPosition.y, gridPosition.x] != null && mapEntity[gridPosition.y, gridPosition.x].IsInteractable();
-}
-public bool IsInteractableTile(Vector2Int gridPosition){
-//check if tile is interactable
-for(int i = -1; i <= 1; i++){
-    for(int j = -1; j <= 1; j++){
-        if(IsInteractableUnit(gridPosition + new Vector2Int(i, j))){
+    public bool IsWalkable(Vector2Int gridPosition){
+        //check if bloc is walkable
+        if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
+            return false;
+        }
+        if(mapBloc[gridPosition.y, gridPosition.x].IsWalkable && (mapEntity[gridPosition.y, gridPosition.x] == null)){
+            return true;
+        }else if(mapEntity[gridPosition.y, gridPosition.x] != null && mapEntity[gridPosition.y, gridPosition.x].IsWalkable()){
+            mapEntity[gridPosition.y, gridPosition.x].OnWalk();
             return true;
         }
+        return false;
     }
-}
-return false;
-}
 
-public void UpdateTile(Vector2Int gridPosition){
-//set tile
-if(mapEntity[gridPosition.y, gridPosition.x] != null){
-    tileMapEntity.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), mapEntity[gridPosition.y, gridPosition.x].GetTile());
-}else{
-    tileMapEntity.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), null);
-}
+    private void InteractUnit(Vector2Int gridPosition){
+        //interact with unit
+        if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
+            return;
+        }
+        if(mapEntity[gridPosition.y, gridPosition.x] != null)
+            mapEntity[gridPosition.y, gridPosition.x].OnInteract();
+    }
+    public void Interact(Vector2Int gridPosition){
+        //interact with bloc
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                InteractUnit(gridPosition + new Vector2Int(i, j));
+            }
+        }
+        showMap();
+    }
 
-if(mapBloc[gridPosition.y, gridPosition.x] != null){
-    tileMapBloc.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), mapBloc[gridPosition.y, gridPosition.x].GetTile());
-}else{
-    tileMapBloc.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), null);
-}
-}
+    private bool IsInteractableUnit(Vector2Int gridPosition){
+        //check if unit is interactable
+        if(gridPosition.x < 0 || gridPosition.x >= mapBloc.GetLength(1) || gridPosition.y < 0 || gridPosition.y >= mapBloc.GetLength(0)){
+            return false;
+        }
+        return mapEntity[gridPosition.y, gridPosition.x] != null && mapEntity[gridPosition.y, gridPosition.x].IsInteractable();
+    }
+    public bool IsInteractableTile(Vector2Int gridPosition){
+        //check if tile is interactable
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                if(IsInteractableUnit(gridPosition + new Vector2Int(i, j))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-public void RemoveTileEntity(Vector2Int gridPosition){
-//remove tile entity
-mapEntity[gridPosition.y, gridPosition.x] = null;
-showMap();
-}
+    public void UpdateTile(Vector2Int gridPosition){
+        //set tile
+        if(mapEntity[gridPosition.y, gridPosition.x] != null){
+            tileMapEntity.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), mapEntity[gridPosition.y, gridPosition.x].TileSprite);
+        }else{
+            tileMapEntity.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), null);
+        }
+
+        if(mapBloc[gridPosition.y, gridPosition.x] != null){
+            tileMapBloc.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), mapBloc[gridPosition.y, gridPosition.x].TileSprite);
+        }else{
+            tileMapBloc.SetTile(new Vector3Int(gridPosition.x, gridPosition.y, 0), null);
+        }
+    }
+
+    public void RemoveTileEntity(Vector2Int gridPosition){
+        //remove tile entity
+        mapEntity[gridPosition.y, gridPosition.x] = null;
+        showMap();
+    }
 }

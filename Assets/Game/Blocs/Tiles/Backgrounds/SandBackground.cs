@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class SandBackground : TileBloc{
     public SandBackground(Vector2Int pos){
-        this.tile = BlocManager.instance.GetTile("SandPath");
-        this.isWalkable = true;
+        this.TileSprite = BlocManager.instance.GetTile("SandPath");
+        this.IsWalkable = true;
+        
+        //pos
         this.position = pos;
+    }
+    
+    public override string GetId(){
+        return "sand";
     }
 }

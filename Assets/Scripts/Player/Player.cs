@@ -7,7 +7,8 @@ public class Player : MonoBehaviour{
 
     private Vector2Int gridPosition;
     private Vector2 position;
-    private Vector2 targetPosition;
+    [SerializeField]
+    private AnimationCurve moveCurve;
 
     [SerializeField]
     private Sprite spriteFL;
@@ -26,7 +27,6 @@ public class Player : MonoBehaviour{
     void Start(){
         gridPosition = new Vector2Int(1, 1);
         position = new Vector2(gridPosition.x, gridPosition.y);
-        targetPosition = new Vector2(gridPosition.x, gridPosition.y);
         //set player position
         transform.position = new Vector3(position.x, position.y, 0);
     }
@@ -51,8 +51,8 @@ public class Player : MonoBehaviour{
         UpdateSprite();
 
         this.gridPosition = gridPosition;
-        targetPosition = new Vector2(gridPosition.x, gridPosition.y);
-
+        LeanTween.move(gameObject, new Vector3(gridPosition.x, gridPosition.y, 0), 0.2f)
+            .setEase(moveCurve);
     }
 
     private void UpdateSprite(){
@@ -69,13 +69,6 @@ public class Player : MonoBehaviour{
             }else{
                 sr.sprite = spriteBR;
             }
-        }
-    }
-
-    void Update(){
-        if(Vector2.Distance(position, targetPosition) > 0.05f){
-            position = Vector2.Lerp(position, targetPosition, 11f*Time.deltaTime);
-            transform.position = new Vector3(position.x, position.y, 0);
         }
     }
 }

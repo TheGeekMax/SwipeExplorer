@@ -4,19 +4,31 @@ using UnityEngine;
 
 public class Bac : TileBlocEntity{
     string signal;
-    public Bac(Vector2Int pos, string signal){
-        this.tile = BlocManager.instance.GetTile("Bac_off");
-        this.isWalkable = false;
+    
+    private bool used = false;
+    
+    public Bac(Vector2Int pos){
+        this.TileSprite = BlocManager.instance.GetTile("Bac_off");
         this.position = pos;
-        this.isInteractable = true;
-        this.signal = signal;
+        this.isWalkable = false;
     }
 
     public override void OnInteract(){
-        this.tile = BlocManager.instance.GetTile("Bac_on");
-        this.isInteractable = false;
+        this.TileSprite = BlocManager.instance.GetTile("Bac_on");
         SignalManager.instance.SendSignal(signal);
+        used = true;
         MapManager.instance.ForceInteract(this.position + new Vector2Int(0, 1));
     }
     
+    public override bool IsInteractable(){
+        return !used;
+    }
+    
+    public override string GetId(){
+        return "bac";
+    }
+    
+    public override void SetupSignal(string prefix){
+        signal = prefix + "_s1";
+    }
 }

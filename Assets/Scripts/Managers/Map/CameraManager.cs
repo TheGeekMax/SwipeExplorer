@@ -71,16 +71,26 @@ public class CameraManager : MonoBehaviour{
             lights[casePos.x, casePos.y] = light;
         }
     }
+    
+    public void Shake(Vector2 direction){
+        LeanTween
+            .move(Camera.main.gameObject, Camera.main.transform.position + new Vector3(direction.x*.5f, direction.y*.5f, 0),
+                0.5f)
+            .setEase(LeanTweenType.punch);
+    }
 
     void Update(){
         calculateGridPosition();
+        
+        //update fps
+        fpsText.text = (1.0f / Time.deltaTime).ToString("F0");
+        
         //lerp to grid position
         Vector3 targetPosition = new Vector3(gridPosition.x+.5f, gridPosition.y+.5f, -10);
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, cameraSpeed*Time.deltaTime);
         Background.transform.position = Camera.main.transform.position-new Vector3(0,0,Camera.main.transform.position.z+1);
         AddLightIfNeeded();
 
-        //update fps
-        fpsText.text = (1.0f / Time.deltaTime).ToString("F0");
+        
     }
 }

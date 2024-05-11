@@ -6,6 +6,8 @@ public class PlayerMovementManager : MonoBehaviour{
     public static PlayerMovementManager instance;
     private Player playerInstance;
     private MapManager mapManagerInstance;
+    
+    private Vector2 shakeTotalDirection = new Vector2(0, 0);
 
     void Awake(){
         if(instance == null){
@@ -29,6 +31,8 @@ public class PlayerMovementManager : MonoBehaviour{
             gridPosition.y++;
         }
         playerInstance.SetGridPosition(gridPosition);
+        shakeTotalDirection += new Vector2(0, 1);
+        Shake();
         PlayerInteractionManager.instance.updateInteractButton();
     }
 
@@ -39,6 +43,8 @@ public class PlayerMovementManager : MonoBehaviour{
             gridPosition.y--;
         }
         playerInstance.SetGridPosition(gridPosition);
+        shakeTotalDirection += new Vector2(0, -1);
+        Shake();
         PlayerInteractionManager.instance.updateInteractButton();
     }
 
@@ -49,6 +55,8 @@ public class PlayerMovementManager : MonoBehaviour{
             gridPosition.x--;
         }
         playerInstance.SetGridPosition(gridPosition);
+        shakeTotalDirection += new Vector2(-1, 0);
+        Shake();
         PlayerInteractionManager.instance.updateInteractButton();
     }
 
@@ -59,7 +67,14 @@ public class PlayerMovementManager : MonoBehaviour{
             gridPosition.x++;
         }
         playerInstance.SetGridPosition(gridPosition);
+        shakeTotalDirection += new Vector2(1, 0);
+        Shake();
         PlayerInteractionManager.instance.updateInteractButton();
+    }
+
+    public void Shake(){
+        CameraManager.instance.Shake(shakeTotalDirection);
+        shakeTotalDirection = new Vector2(0, 0);
     }
 
     public void forcePosition(Vector2Int gridPosition){
